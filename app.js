@@ -8,6 +8,7 @@ const youngerQuestionsController = require("./controllers/youngerQuestionsContro
 const questionsOlderController = require("./controllers/questionsOlderController");
 const statsController = require("./controllers/statsController");
 const caseFilesController = require("./controllers/caseFilesController");
+// const aiController = require("./controllers/aiController");
 
 // CONFIGURATION
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/younger_questions", youngerQuestionsController);
 app.use("/api/older_questions/", questionsOlderController);
 app.use("/api/stats", statsController);
 app.use("/api/case_files", caseFilesController);
+// app.use("/api/ai", aiController);
 
 // ROUTES
 app.get("/", (_req, res) => {
