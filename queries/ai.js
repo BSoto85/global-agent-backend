@@ -1,30 +1,48 @@
 const db = require("../db/dbConfig");
 // require("dotenv").config();
 
-import Anthropic from "@anthropic-ai/sdk";
+// const Anthropic = require("@anthropic-ai/sdk");
 
-const anthropic = new Anthropic();
-const systemPromptForArticleSummary = require("../helpers/aiData");
-// const aiKey = process.env.ANTHROPIC_API_KEY;
+// const anthropic = new Anthropic();
+// const systemPromptForArticleSummary = require("../helpers/aiData");
+// // const aiKey = process.env.ANTHROPIC_API_KEY;
 
-const msg = await anthropic.messages.create({
-  model: "claude-3-5-sonnet-20240620",
-  max_tokens: 2000,
-  temperature: 0,
-  system: systemPromptForArticleSummary,
-  messages: [
-    {
-      role: "user",
-      content: [
-        {
-          type: "text",
-          text: "Why is the ocean salty?",
-        },
-      ],
-    },
-  ],
-});
-console.log(msg);
+// const articleSummary = anthropic.messages.create({
+//   model: "claude-3-5-sonnet-20240620",
+//   max_tokens: 2000,
+//   temperature: 0,
+//   system: systemPromptForArticleSummary,
+//   messages: [
+//     {
+//       role: "user",
+//       content: [
+//         {
+//           type: "text",
+//           text: case_files.article_content,
+//         },
+//       ],
+//     },
+//   ],
+// });
+
+const addSummary = async (summary, article_id) => {
+  try {
+    if (age_range === "younger") {
+      return await db.any(
+        "UPDATE case_files SET summary_young=$1 WHERE article_id=$2 RETURNING *",
+        [summary.younger, article_id]
+      );
+    }
+    if (age_range === "older") {
+      return await db.any(
+        "UPDATE case_files SET summary_old=$1 WHERE article_id=$2 RETURNING *",
+        [summary.older, article_id]
+      );
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 const addQuestionsAndAnswers = async (
   question,
@@ -63,4 +81,4 @@ const addQuestionsAndAnswers = async (
   }
 };
 
-module.exports = { addQuestionsAndAnswers };
+module.exports = { addQuestionsAndAnswers, addSummary };

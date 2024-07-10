@@ -6,25 +6,24 @@ const { getAllCountries } = require("../queries/countries");
 const {
   getCaseFilesByCountry,
   getLatestCaseFile,
-  getAllNewCaseFiles
+  getAllNewCaseFiles,
 } = require("../queries/caseFiles");
 const deleteOldCaseFiles = require("../helpers/deleteOldCaseFiles");
 const fetchArticles = require("../helpers/fetchArticles");
 
-
 // http://localhost:3003/api/case_files/news-from-australia
 case_files.get("/news-from-australia", async (req, res) => {
   try {
-    deleteOldCaseFiles()
+    await deleteOldCaseFiles();
     const caseFiles = await getLatestCaseFile();
-    if (!caseFiles[0]) {
+    if (!caseFiles[0] || isNaN(caseFiles[0])) {
       const allCountries = await getAllCountries();
       if (!allCountries[0]) {
         res.status(500).json({ error: "Error fetching countries" });
       }
-      const checkCaseFiles = await getAllNewCaseFiles()
-      if(!checkCaseFiles[0]){
-        fetchArticles(allCountries)
+      const checkCaseFiles = await getAllNewCaseFiles();
+      if (!checkCaseFiles[0]) {
+        fetchArticles(allCountries);
       }
     }
     res.status(200).json({ message: "Success adding articles!" });
