@@ -1,5 +1,5 @@
 const { addCaseFile } = require("../queries/caseFiles");
-const { addSummary } = require("../queries/ai");
+// const { addSummary } = require("../queries/ai");
 
 const URL = process.env.BASE_URL;
 const key = process.env.API_KEY;
@@ -22,7 +22,7 @@ function getFormattedDate() {
 const currentDate = getFormattedDate();
 
 async function addArticles(allCountries) {
-  allCountries.map(async (country) => {
+  for (const country of allCountries) {
     const url = `${URL}?source-country=${country.country_code}&language=en&date=${currentDate}`;
     const response = await fetch(url, {
       method: "GET",
@@ -43,26 +43,10 @@ async function addArticles(allCountries) {
     // res.json(threeArticles);
     // case_files.post("/news-from-australia", async (req, res) => {
     //   try {
-    for (let newFile of threeArticles) {
-      //   console.log("New file", newFile);
-      // const articleSummary = await anthropic.messages.create({
-      //   model: "claude-3-5-sonnet-20240620",
-      //   max_tokens: 2000,
-      //   temperature: 0,
-      //   system: systemPromptForArticleSummary,
-      //   messages: [
-      //     {
-      //       role: "user",
-      //       content: [
-      //         {
-      //           type: "text",
-      //           text: newFile.text,
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // });
-      console.log("Article summary", articleSummary);
+    for (const newFile of threeArticles) {
+      console.log("New file", newFile);
+
+      // console.log("Article summary", articleSummary);
       const addedCaseFile = await addCaseFile({
         countries_id: country.id,
         article_id: newFile.id,
@@ -75,7 +59,7 @@ async function addArticles(allCountries) {
       });
       console.log("Added file", addedCaseFile);
     }
-  });
+  }
 }
 
 module.exports = addArticles;

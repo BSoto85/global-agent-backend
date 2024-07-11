@@ -25,20 +25,30 @@ const db = require("../db/dbConfig");
 //   ],
 // });
 
-const addSummary = async (summary, article_id) => {
+//PUT to add summary for younger to case files table
+const updateYoungerSummary = async (
+  youngerSummary,
+  olderSummary,
+  article_id
+) => {
   try {
-    if (age_range === "younger") {
-      return await db.any(
-        "UPDATE case_files SET summary_young=$1 WHERE article_id=$2 RETURNING *",
-        [summary.younger, article_id]
-      );
-    }
-    if (age_range === "older") {
-      return await db.any(
-        "UPDATE case_files SET summary_old=$1 WHERE article_id=$2 RETURNING *",
-        [summary.older, article_id]
-      );
-    }
+    const addYoungerSummary = await db.any(
+      "UPDATE case_files SET summary_young=$1 WHERE article_id=$2 RETURNING *",
+      [youngerSummary, article_id]
+    );
+    return addYoungerSummary;
+  } catch (error) {
+    return error;
+  }
+};
+
+const updateOlderSummary = async (youngerSummary, olderSummary, article_id) => {
+  try {
+    const addOlderSummary = await db.any(
+      "UPDATE case_files SET summary_old=$1 WHERE article_id=$2 RETURNING *",
+      [olderSummary, article_id]
+    );
+    return addOlderSummary;
   } catch (error) {
     return error;
   }
@@ -81,4 +91,8 @@ const addQuestionsAndAnswers = async (
   }
 };
 
-module.exports = { addQuestionsAndAnswers, addSummary };
+module.exports = {
+  addQuestionsAndAnswers,
+  updateYoungerSummary,
+  updateOlderSummary,
+};
