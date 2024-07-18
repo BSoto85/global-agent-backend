@@ -8,7 +8,7 @@ const {
   getAllNewCaseFiles,
 } = require("../queries/caseFiles");
 const deleteOldCaseFiles = require("../helpers/deleteOldCaseFiles");
-const addArticles = require("../helpers/addArticles");
+const addArticles = require("../helpers/oldAddArticles.js");
 const { getSummaries } = require("../helpers/aiGetSummary");
 const { addSummaries } = require("../helpers/addSummaries");
 const {
@@ -19,6 +19,7 @@ const {
   addOlderQuestionAndAnswers,
 } = require("../queries/ai");
 const translateText = require("../helpers/translateText");
+const getFormattedCurrentDate = require("./getFormattedCurrentDate.js");
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -32,10 +33,58 @@ case_files.get("/world_news", async (req, res) => {
     if (!checkCaseFiles[0]) {
       const allCountries = await getAllCountries();
       if (!allCountries[0]) {
-        // res.status(500).json({ error: "Error fetching countries" });
         throw new Error(" Error fetching countries");
       }
-      const addedArticles = await addArticles(allCountries);
+      // ##############################
+      // const addedArticles = await addArticles(allCountries);
+      // ##############################
+
+      // const currentDate = getFormattedCurrentDate();
+      let addedArticles = [];
+// fetchArticles
+      const currentDate = getFormattedCurrentDate();
+      for (let country of allCountries) {
+
+        const threeArticles = await fetchArticles(country, currentDate)
+        // addArticles
+        for (let newFile of threeArticles) {
+          //   console.log("New file", newFile);
+          //  *** if language_code !== en, then run translate helper function ***
+          let translatedContent = newFile.text;
+          let translatedTitle = newFile.title;
+          // Translate content and title if the language is not English
+          if (country.language_code !== "en") {
+            // if (country.language_code === "en") {
+              translatedContent = await translateText(newFile.txt, "en");
+              translatedTitle = await translateText(newFile.title, "en");
+              console.log(translatedContent);
+            }
+            // addArticles
+            
+          const addedCaseFile = await addCaseFile({
+            countries_id: country.id,
+            article_id: newFile.id,
+            // article_content: newFile.text,
+            // article_title: newFile.title,
+            article_content: translatedContent,
+            article_title: translatedTitle,
+            publish_date: newFile.publish_date,
+            photo_url: newFile.image,
+          });
+          // console.log("Added file", addedCaseFile);
+          addedArticles.push({
+            articleContent: addedCaseFile.article_content,
+            articleId: addedCaseFile.article_id,
+          });
+        }
+        delay(1000); 
+
+      }
+        
+// ............
+
+
+      // ##############################
       // res.status(200).json({ message: "Success adding articles!" })
       console.log(`Success adding ${addedArticles.length} articles!`);
       if (addedArticles.length === 0) {
