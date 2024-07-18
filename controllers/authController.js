@@ -4,15 +4,6 @@ const authMiddleware = require('../middlewares/authMiddleware')
 const { createNewUser, findUserByUID } = require('../queries/users.js')
 const { createUserStats  } = require('../queries/stats.js')
 
-// auth.post('/register', async (req, res) => {
-//   const newUser = await createNewUser(req.body)
-//   if (newUser) {
-//     res.status(201).json(newUser, newUserStats)
-//   } else {
-//     res.status(500).json({ error: 'Error creating user' })
-//   }
-// })
-
 auth.post('/register', async (req, res) => {
   try {
     const newUser = await createNewUser(req.body);
@@ -20,9 +11,7 @@ auth.post('/register', async (req, res) => {
     if (!newUser) {
       return res.status(500).json({ error: 'Error creating user' });
     }
-    
     const newUserStats = await createUserStats(newUser.id);
-
     res.status(201).json({
       user: newUser,
       stats: newUserStats

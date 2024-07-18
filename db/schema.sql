@@ -25,14 +25,6 @@ CREATE TABLE stats (
     user_id INTEGER REFERENCES users(id)
 );
 
--- CREATE TABLE badges (
---     id SERIAL PRIMARY KEY,
---     name VARCHAR(100),
---     image TEXT NOT NULL,
---     description VARCHAR(200),
---     xp_required INTEGER NOT NULL
--- );
-
 CREATE TABLE countries (
     id SERIAL PRIMARY KEY,
     flag TEXT NOT NULL,
@@ -40,18 +32,6 @@ CREATE TABLE countries (
     name VARCHAR(30),
     language_code VARCHAR(2)
 );
-
--- CREATE TABLE user_badges (
---     id SERIAL PRIMARY KEY,
---     badge_id INTEGER NOT NULL REFERENCES badges(id),
---     user_id INTEGER NOT NULL REFERENCES users(id)
--- );
-
--- CREATE TABLE visited_countries (
---    id SERIAL PRIMARY KEY,
---    countries_id INTEGER NOT NULL REFERENCES countries(id),
---    user_id INTEGER NOT NULL REFERENCES users(id)
--- );
 
 -- Change names of older and younger to add demographic at the end
 CREATE TABLE case_files (
@@ -65,14 +45,6 @@ CREATE TABLE case_files (
     countries_id INTEGER REFERENCES countries(id),
     photo_url TEXT
 );
-
--- CREATE TABLE photos (
---     id SERIAL PRIMARY KEY,
---     photo_url TEXT,
---     article_id INTEGER,
---     caption TEXT,
---     case_files_id INTEGER REFERENCES case_files(id) ON DELETE CASCADE
--- );
 
 CREATE TABLE questions_younger (
     id SERIAL PRIMARY KEY,

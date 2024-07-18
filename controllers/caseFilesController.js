@@ -4,90 +4,53 @@ const case_files = express.Router();
 const { getAllCountries } = require("../queries/countries");
 const {
   getCaseFilesByCountry,
-  getLatestCaseFile,
   getAllNewCaseFiles,
 } = require("../queries/caseFiles");
 const deleteOldCaseFiles = require("../helpers/deleteOldCaseFiles");
-const addArticles = require("../helpers/addArticles");
-const { getSummaries } = require("../helpers/aiGetSummary");
+const addTranslatedArticles = require("../helpers/addArticles.js");
 const { addSummaries } = require("../helpers/addSummaries");
 const {
   generateQuestionsAndAnswers,
-} = require("../helpers/aiGenerateQuestions");
-const {
-  addYoungerQuestionAndAnswers,
-  addOlderQuestionAndAnswers,
-} = require("../queries/ai");
-const translateText = require("../helpers/translateText");
+} = require("../helpers/generateQuestionsAndAnswers.js");
+const addQuestionsAndAnswers = require("../helpers/addQuestionsAndAnswers.js")
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const getFormattedCurrentDate = require("../helpers/getFormattedCurrentDate.js");
 
 //Comment why using delay
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 // http://localhost:3003/api/case_files/world_news
 case_files.get("/world_news", async (req, res) => {
   try {
-    // console.log(translateText("Hello World!", "es"));
     await deleteOldCaseFiles();
     const checkCaseFiles = await getAllNewCaseFiles();
     if (!checkCaseFiles[0]) {
       const allCountries = await getAllCountries();
       if (!allCountries[0]) {
-        // res.status(500).json({ error: "Error fetching countries" });
         throw new Error(" Error fetching countries");
       }
-      const addedArticles = await addArticles(allCountries);
-      // res.status(200).json({ message: "Success adding articles!" })
-      console.log(`Success adding ${addedArticles.length} articles!`);
-      if (addedArticles.length === 0) {
-        throw new Error(" Error adding articles");
-      }
-      const summariesArr = await addSummaries(addedArticles);
-      //For younger questions
-      for (const summary of summariesArr) {
-        const getQuestionsAndAnswers = await generateQuestionsAndAnswers(
-          summary
-        );
-        // console.log("%%%%", getQuestionsAndAnswers);
-        // await delay(500);
-        for (const question of getQuestionsAndAnswers.questionsForYounger) {
-          const addedYoungerQuestionAndAnswers =
-            await addYoungerQuestionAndAnswers(
-              question,
-              getQuestionsAndAnswers.article_id
-            );
-          // console.log(
-          //   "Younger questions and answers",
-          //   addedYoungerQuestionAndAnswers
-          // );
-          await delay(1000);
+      const currentDate = getFormattedCurrentDate();
+      for (let country of allCountries) {
+        const threeArticles = await fetchArticles(country, currentDate)
+        const addedArticles = await addTranslatedArticles(threeArticles)
+        delay(1000); 
+        console.log(`Success adding ${addedArticles.length} articles!`);
+        if (addedArticles.length === 0) {
+          throw new Error(" Error adding articles");
         }
-      }
-      //For older questions
-      for (const summary of summariesArr) {
-        const getQuestionsAndAnswers = await generateQuestionsAndAnswers(
-          summary
-        );
-        console.log("%%%%", getQuestionsAndAnswers);
-        // await delay(500);
-        for (const question of getQuestionsAndAnswers.questionsForOlder) {
-          const addedOlderQuestionAndAnswers = await addOlderQuestionAndAnswers(
-            question,
-            getQuestionsAndAnswers.article_id
+        const summariesArr = await addSummaries(addedArticles);
+        for(let summary of summariesArr){
+          const getQuestionsAndAnswers = await generateQuestionsAndAnswers(
+            summary
           );
-          // console.log(
-          //   "Younger questions and answers",
-          //   addedOlderQuestionAndAnswers
-          // );
-          await delay(1000);
+          await addQuestionsAndAnswers(getQuestionsAndAnswers)
         }
       }
-      res.status(200).json({ message: "Added Summaries and questions" });
+      res.status(200).json({ message: "Added new articles, summaries and questions" });
     } else {
       res.status(200).json({ message: "Articles are up to date" });
-      // console.log("Articles are up to date");
     }
   } catch (error) {
-    // console.error("Error fetching news:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -96,7 +59,6 @@ case_files.get("/world_news", async (req, res) => {
 case_files.get("/:countries_id", async (req, res) => {
   const { countries_id } = req.params;
   const allCaseFilesByCountry = await getCaseFilesByCountry(countries_id);
-  // console.log("Case files by country", allCaseFilesByCountry);
   if (allCaseFilesByCountry[0]) {
     res.status(200).json(allCaseFilesByCountry);
   } else {

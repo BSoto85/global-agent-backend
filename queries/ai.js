@@ -121,7 +121,6 @@ const getAllOlderQuestions = async () => {
 };
 
 module.exports = {
-  // addQuestionsAndAnswers,
   updateYoungerSummary,
   updateOlderSummary,
   getAllYoungerQuestionsAndAnswers,
