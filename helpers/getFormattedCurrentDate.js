@@ -1,5 +1,4 @@
 
-
 function getFormattedCurrentDate() {
   const currentDate = new Date();
   const year = currentDate.getFullYear();

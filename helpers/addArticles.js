@@ -4,7 +4,6 @@ const { addCaseFile } = require("../queries/caseFiles");
 async function addTranslatedArticles(threeArticles) {
     const addedArticles = []
     for (let newFile of threeArticles) {
-        //   console.log("New file", newFile);
         //  *** if language_code !== en, then run translate helper function ***
         let translatedContent = newFile.text;
         let translatedTitle = newFile.title;
@@ -12,7 +11,6 @@ async function addTranslatedArticles(threeArticles) {
         if (country.language_code !== "en") {
             translatedContent = await translateText(newFile.txt, "en");
             translatedTitle = await translateText(newFile.title, "en");
-            console.log(translatedContent);
           }
         const addedCaseFile = await addCaseFile({
           countries_id: country.id,
@@ -22,7 +20,6 @@ async function addTranslatedArticles(threeArticles) {
           publish_date: newFile.publish_date,
           photo_url: newFile.image,
         });
-        // console.log("Added file", addedCaseFile);
         addedArticles.push({
           articleContent: addedCaseFile.article_content,
           articleId: addedCaseFile.article_id,

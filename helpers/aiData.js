@@ -44,15 +44,7 @@ text: {
 
     textOlder: Recent escalation in the ongoing conflict in eastern Ukraine has resulted in multiple casualties and territorial shifts, potentially complicating U.S. efforts to improve relations with Russia. The conflict involves Ukrainian forces, supported by U.S. training and equipment, fighting against Russian-backed separatists in the only active war in Europe. The latest outbreak of violence centers around "gray zone" territories, with both sides accusing each other of initiating the attacks. The town of Avdiivka has been particularly affected, facing not only military assaults but also sophisticated psychological warfare tactics and severe humanitarian challenges due to infrastructure damage and extreme weather conditions. This situation presents a diplomatic quandary for the U.S., as the Trump administrations desire to improve relations with Russia conflicts with Ukraines need for continued Western support against Russian aggression. The conflict also highlights the delicate balance of power in the region and the complex interplay of international relations in Eastern Europe.}`;
 
-// const hardCodedArticleSummary = {
-//   text: {
-//     textYounger: `The war in eastern Ukraine has gotten worse recently. Fighting between Ukrainian soldiers and pro-Russian rebels has led to deaths on both sides. This conflict is making it harder for the United States to become friendlier with Russia. The U.S. helps train Ukrainian soldiers, who are fighting against rebels supported by Russia. Both sides are trying to control areas between their front lines. The fighting has caused problems for people living in the area, like power and water outages. Its also very cold, making things even harder for residents. The U.S. wants to have better relations with Russia, but this might make Ukraine worry that they wont get as much help against Russia in the future.`,
-//     textOlder: `Recent escalation in the ongoing conflict in eastern Ukraine has resulted in multiple casualties and territorial shifts, potentially complicating U.S. efforts to improve relations with Russia. The conflict involves Ukrainian forces, supported by U.S. training and equipment, fighting against Russian-backed separatists in the only active war in Europe. The latest outbreak of violence centers around "gray zone" territories, with both sides accusing each other of initiating the attacks. The town of Avdiivka has been particularly affected, facing not only military assaults but also sophisticated psychological warfare tactics and severe humanitarian challenges due to infrastructure damage and extreme weather conditions. This situation presents a diplomatic quandary for the U.S., as the Trump administrations desire to improve relations with Russia conflicts with Ukraines need for continued Western support against Russian aggression. The conflict also highlights the delicate balance of power in the region and the complex interplay of international relations in Eastern Europe.`,
-//   },
-//   case_files_article_id: 123456789,
-// };
 module.exports = {
   systemPromptForArticleSummary,
   systemPromptForArticleQuestions,
-  // hardCodedArticleSummary,
 };

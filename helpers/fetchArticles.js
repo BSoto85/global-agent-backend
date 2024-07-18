@@ -1,4 +1,5 @@
 const getFormattedCurrentDate = require("./getFormattedCurrentDate.js");
+require("dotenv").config();
 const URL = process.env.BASE_URL;
 const key = process.env.NEWS_API_KEY;
 
@@ -12,7 +13,6 @@ async function fetchArticles(country, currentDate) {
     });
     if (response.ok) {
         const data = await response.json();
-        // console.log("Data", data);
         const allArticles = data.top_news[0].news;
         const middle = Math.floor(allArticles.length / 2);
         const threeArticles = [

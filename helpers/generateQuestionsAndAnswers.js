@@ -2,7 +2,6 @@ const Anthropic = require("@anthropic-ai/sdk");
 const anthropic = new Anthropic();
 const {
   systemPromptForArticleQuestions,
-  hardCodedArticleSummary,
 } = require("./aiData");
 
 //http://localhost:3003/api/ai/questions
@@ -24,13 +23,7 @@ const generateQuestionsAndAnswers = async (summary) => {
       },
     ],
   });
-  // }
-  // console.log(
-  //   "*******",
-  //   JSON.parse(articleQuestionsAndAnswers.content[0].text)
-  // );
   const parsed = JSON.parse(articleQuestionsAndAnswers.content[0].text);
-  // console.log("^^^^^^", { ...parsed, article_id: summary.article_id });
   return { ...parsed, article_id: summary.article_id };
 };
 
