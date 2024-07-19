@@ -35,12 +35,12 @@ VALUES
 INSERT INTO countries(name, flag, country_code, language_code)
 VALUES
     ('Spain', '🇪🇸', 'es', 'es'),
-    ('Canada', '🇨🇦', 'ca', 'en');
+    -- ('Canada', '🇨🇦', 'ca', 'en');
     -- ('Brazil', '🇧🇷', 'br', 'pt');
     -- ('Dominican Republic', 'https://res.cloudinary.com/dhexjuuzd/image/upload/v1719945529/download_1_ey5dxy.png', 'do', 'es'),
     -- ('Portugal', 'https://res.cloudinary.com/dhexjuuzd/image/upload/v1719945536/download_2_wosmqd.png', 'pt'),
     -- ('China', 'https://res.cloudinary.com/dhexjuuzd/image/upload/v1719945542/download_3_xdtw9a.png', 'cn', 'zh');
-    -- ('Australia', '🇦🇺', 'au', 'en');
+    ('Australia', '🇦🇺', 'au', 'en');
 
 -- INSERT INTO user_badges(badge_id, user_id)
 -- VALUES

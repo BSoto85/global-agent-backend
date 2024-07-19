@@ -47,7 +47,7 @@ case_files.get("/world_news", async (req, res) => {
         const getQuestionsAndAnswers = await generateQuestionsAndAnswers(
           summary
         );
-        // console.log("%%%%", getQuestionsAndAnswers);
+        console.log("%%%%", getQuestionsAndAnswers);
         // await delay(500);
         for (const question of getQuestionsAndAnswers.questionsForYounger) {
           const addedYoungerQuestionAndAnswers =

@@ -37,11 +37,11 @@ async function addArticles(allCountries) {
 
     // console.log("Response", response);
     if (!response.ok) {
-      //   console.error(response.status);
+        console.error(response.status);
       // throw new Error("Failed to fetch news");
     }
     const data = await response.json();
-    // console.log("Data", data);
+    console.log("Data", data);
     const allArticles = data.top_news[0].news;
     const middle = Math.floor(allArticles.length / 2);
     const threeArticles = [
@@ -51,16 +51,16 @@ async function addArticles(allCountries) {
     ];
 
     for (let newFile of threeArticles) {
-      //   console.log("New file", newFile);
+        // console.log("New file WITHOUT TRANSLATION", newFile);
       //  *** if language_code !== en, then run translate helper function ***
       let translatedContent = newFile.text;
       let translatedTitle = newFile.title;
       // Translate content and title if the language is not English
       if (country.language_code !== "en") {
         // if (country.language_code === "en") {
-        let translatedContent = await translateText("Hola", "en");
-        let translatedTitle = await translateText("Como estas", "en");
-        console.log(translatedContent);
+        translatedContent = await translateText(newFile.text, "en");
+        translatedTitle = await translateText(newFile.title, "en");
+        console.log("TRANSLATED CONTENT",translatedContent);
         // translatedContent = await translateText(newFile.text, "es");
         // translatedTitle = await translateText(newFile.title, "es");
       }
@@ -75,13 +75,13 @@ async function addArticles(allCountries) {
         publish_date: newFile.publish_date,
         photo_url: newFile.image,
       });
-      // console.log("Added file", addedCaseFile);
+      console.log("Added file WITH TRANSLATION", addedCaseFile);
       addedArticles.push({
         articleContent: addedCaseFile.article_content,
         articleId: addedCaseFile.article_id,
       });
     }
-    delay(1000);
+    await delay(1000);
   }
   return addedArticles;
 }

@@ -21,20 +21,20 @@ const { Translate } = require("@google-cloud/translate").v2;
 // });
 
 const base64Credentials = process.env.GOOGLE_APPLICATION_CREDENTIALS_BASE64;
-console.log("Base 64", base64Credentials);
+// console.log("Base 64", base64Credentials);
 
 const jsonString = Buffer.from(base64Credentials, "base64").toString("utf-8");
-console.log("JSON sring", jsonString);
+// console.log("JSON string", jsonString);
 
 const credentials = JSON.parse(jsonString);
-console.log("Credentials", credentials);
+// console.log("Credentials", credentials);
 
 fs.writeFileSync("/tmp/translation.json", JSON.stringify(credentials));
 // const translator = require("../tmp/translation.json");
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = "/tmp/translation.json";
 // process.env.GOOGLE_APPLICATION_CREDENTIALS = translator;
-console.log("File", process.env.GOOGLE_APPLICATION_CREDENTIALS);
+// console.log("File", process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 const translate = new Translate();
 
