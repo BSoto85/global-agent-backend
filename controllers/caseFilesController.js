@@ -33,28 +33,30 @@ case_files.get("/world_news", async (req, res) => {
       throw new Error(" Error fetching countries");
     }
     const currentDate = getFormattedCurrentDate();
-
+    const allArticles = [];
     for (let country of allCountries) {
       console.log("country", country)
       const threeArticles = await fetchArticles(country, currentDate)
       console.log("Fecthed Three Articles", threeArticles)
       const addedArticles = await addTranslatedArticles(threeArticles)
+      allArticles.push(...addedArticles)
       delay(1000); 
       console.log(`Success adding ${addedArticles.length} articles!`);
       if (addedArticles.length === 0) {
         throw new Error(" Error adding articles");
       }
-      const summariesArr = await addSummaries(addedArticles);
-      console.log("Added Summaries", summariesArr)
-      for(let summary of summariesArr){
-        const getQuestionsAndAnswers = await generateQuestionsAndAnswers(
-          summary
-        );
-        console.log(getQuestionsAndAnswers)
-        await addQuestionsAndAnswers(getQuestionsAndAnswers)
-      }
-      delay(1000);
     }
+    const summariesArr = await addSummaries(allArticles);
+    console.log("Added Summaries", summariesArr)
+    for(let summary of summariesArr){
+      const getQuestionsAndAnswers = await generateQuestionsAndAnswers(
+        summary
+      );
+      console.log(getQuestionsAndAnswers)
+      await addQuestionsAndAnswers(getQuestionsAndAnswers)
+    }
+    delay(1000);
+
     res.status(200).json({ message: "Added new articles, summaries and questions" });
     // } else {
     //   res.status(200).json({ message: "Articles are up to date" });
