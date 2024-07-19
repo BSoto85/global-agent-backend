@@ -7,7 +7,7 @@ const {
   getAllNewCaseFiles,
 } = require("../queries/caseFiles");
 const deleteOldCaseFiles = require("../helpers/deleteOldCaseFiles");
-const addTranslatedArticles = require("../helpers/addArticles.js");
+const addTranslatedArticles = require("../helpers/addTranslatedArticles.js");
 const { addSummaries } = require("../helpers/addSummaries");
 const {
   generateQuestionsAndAnswers,
@@ -45,6 +45,7 @@ case_files.get("/world_news", async (req, res) => {
           );
           await addQuestionsAndAnswers(getQuestionsAndAnswers)
         }
+        delay(1000);
       }
       res.status(200).json({ message: "Added new articles, summaries and questions" });
     } else {

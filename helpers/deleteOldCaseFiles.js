@@ -17,6 +17,9 @@ async function deleteOldCaseFiles() {
   // console.log("Days since last post", daysSinceLastArticlePost);
   if (daysSinceLastArticlePost > 1) {
     const deletedArticles = await deleteOldArticles();
+    console.log("Old articles deleted.")
+  } else {
+    console.log("Articles are up to date.")
   }
 }
 
