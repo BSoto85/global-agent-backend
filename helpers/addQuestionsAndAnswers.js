@@ -10,6 +10,7 @@ async function addQuestionsAndAnswers(getQuestionsAndAnswers) {
             question,
             getQuestionsAndAnswers.article_id
           );
+          console.log("addedYoungerQuestionAndAnswers", addedYoungerQuestionAndAnswers)
         await delay(500);
     }
     for (const question of getQuestionsAndAnswers.questionsForOlder) {
@@ -19,6 +20,7 @@ async function addQuestionsAndAnswers(getQuestionsAndAnswers) {
     );
     await delay(500);
     }
+
 }
   
   module.exports = addQuestionsAndAnswers;
