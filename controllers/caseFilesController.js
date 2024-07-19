@@ -4,16 +4,16 @@ const case_files = express.Router();
 const { getAllCountries } = require("../queries/countries");
 const {
   getCaseFilesByCountry,
-  getAllNewCaseFiles,
+  // getAllNewCaseFiles,
 } = require("../queries/caseFiles");
-const deleteOldCaseFiles = require("../helpers/deleteOldCaseFiles");
-const addTranslatedArticles = require("../helpers/addArticles.js");
+// const deleteOldCaseFiles = require("../helpers/deleteOldCaseFiles");
+const addTranslatedArticles = require("../helpers/addTranslatedArticles.js");
 const { addSummaries } = require("../helpers/addSummaries");
 const {
   generateQuestionsAndAnswers,
 } = require("../helpers/generateQuestionsAndAnswers.js");
 const addQuestionsAndAnswers = require("../helpers/addQuestionsAndAnswers.js")
-
+const { deleteOldArticles } = require("../queries/caseFiles");
 const getFormattedCurrentDate = require("../helpers/getFormattedCurrentDate.js");
 
 //Comment why using delay
@@ -22,9 +22,10 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // http://localhost:3003/api/case_files/world_news
 case_files.get("/world_news", async (req, res) => {
   try {
-    await deleteOldCaseFiles();
-    const checkCaseFiles = await getAllNewCaseFiles();
-    if (!checkCaseFiles[0]) {
+    // await deleteOldCaseFiles();
+    // const checkCaseFiles = await getAllNewCaseFiles();
+    // if (checkCaseFiles.length === 0) {
+      await deleteOldArticles()
       const allCountries = await getAllCountries();
       if (!allCountries[0]) {
         throw new Error(" Error fetching countries");
@@ -45,11 +46,12 @@ case_files.get("/world_news", async (req, res) => {
           );
           await addQuestionsAndAnswers(getQuestionsAndAnswers)
         }
+        delay(1000);
       }
       res.status(200).json({ message: "Added new articles, summaries and questions" });
-    } else {
-      res.status(200).json({ message: "Articles are up to date" });
-    }
+    // } else {
+    //   res.status(200).json({ message: "Articles are up to date" });
+    // }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

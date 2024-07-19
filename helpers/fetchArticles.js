@@ -21,6 +21,8 @@ async function fetchArticles(country, currentDate) {
         allArticles[allArticles.length - 1],
         ];
         return threeArticles  
+    } else {
+        console.log(`Error fetching articles from ${country.name}`)
     }
 }
   
